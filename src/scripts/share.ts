@@ -1,3 +1,5 @@
+import { ensureQr } from './qr-dom';
+
 let toastTimer = 0;
 
 function toast(message: string): void {
@@ -45,7 +47,10 @@ export function initShare(): void {
 
   if (sheet) {
     document.querySelectorAll('[data-open-sheet]').forEach((button) => {
-      button.addEventListener('click', () => sheet.showModal());
+      button.addEventListener('click', () => {
+        ensureQr();
+        sheet.showModal();
+      });
     });
     document.querySelectorAll('[data-close-sheet]').forEach((button) => {
       button.addEventListener('click', closeSheet);

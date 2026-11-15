@@ -20,6 +20,7 @@ const last = letters(person.lastName, first.length);
 
 <div class="card-stage">
   <div class="card-stage__halo" aria-hidden="true"></div>
+  <div class="card-tilt" data-card-tilt>
   <div
     class="card"
     data-card
@@ -80,7 +81,10 @@ const last = letters(person.lastName, first.length);
           </span>
         </div>
 
-        <div class="card__sheen" aria-hidden="true"></div>
+        <div class="card__sheen" data-card-sheen aria-hidden="true">
+          <span class="card__glare" data-card-glare></span>
+          <span class="card__band" data-card-band></span>
+        </div>
       </div>
 
       <div class="card__face card__face--back" aria-hidden="true">
@@ -106,9 +110,8 @@ const last = letters(person.lastName, first.length);
             <span>Kartı çevir</span>
           </span>
         </div>
-
-        <div class="card__sheen"></div>
       </div>
     </div>
+  </div>
   </div>
 </div>

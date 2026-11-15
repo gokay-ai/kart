@@ -40,6 +40,11 @@ bun test         # decodes the generated QR codes with a real decoder
 
 - [Astro](https://astro.build) static site, TypeScript, no UI framework. Animations
   are CSS plus a few small vanilla modules in `src/scripts/`.
+- **Animation budget.** Every running animation changes only `transform` or
+  `opacity`, so the browser runs it on the GPU: an idle page executes no script
+  and repaints nothing. No CSS filters, blend modes or backdrop blurs on or over
+  animated layers; soft edges are baked into gradients or SVG images instead.
+  Keep to this when adding effects, it is what keeps the cards smooth on phones.
 - **Location independent.** `scripts/relativize.ts` rewrites the build to relative
   URLs, so the same output works at `user.github.io/<repo>/` and at the root of a
   custom domain with no rebuild.

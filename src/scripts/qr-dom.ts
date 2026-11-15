@@ -35,11 +35,21 @@ function savePng(svg: string, fileName: string, size = 1600): void {
   image.src = source;
 }
 
+let rendered = false;
+
 /**
  * QR codes are generated in the browser from the address the page is actually
  * served at, so they stay correct when the site moves to another domain.
+ * Safe to call repeatedly: runs once. It is scheduled after the entrance
+ * animation and also called right before a QR is about to be shown.
  */
-export function initQr(): void {
+export function ensureQr(): void {
+  if (rendered) return;
+  rendered = true;
+  initQr();
+}
+
+function initQr(): void {
   document.querySelectorAll<HTMLElement>('[data-qr]').forEach((panel) => {
     const url = new URL(panel.dataset.qr ?? './', location.href).href;
     panel.dataset.qrValue = url;

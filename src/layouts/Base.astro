@@ -16,6 +16,29 @@ interface Props {
 }
 
 const { title, description, ogImage = 'og/ekip.jpg', intro = true, ambient = true } = Astro.props;
+
+// Background sparks are laid out at build time and animated purely in CSS, so
+// they cost no script and no repaint in the browser. A fixed seed keeps the
+// layout identical between builds.
+let seed = 20261115;
+const random = (): number => {
+  seed = (seed * 1664525 + 1013904223) % 4294967296;
+  return seed / 4294967296;
+};
+const sparkColors = ['255 201 0', '255 201 0', '122 172 255', '122 172 255', '255 255 255'];
+const sparks = Array.from({ length: 44 }, () => {
+  const rise = 38 + random() * 70;
+  return [
+    `--x:${(random() * 100).toFixed(1)}%`,
+    `--s:${(3 + random() * 9).toFixed(1)}px`,
+    `--c:${sparkColors[Math.floor(random() * sparkColors.length)]}`,
+    `--o:${(0.3 + random() * 0.55).toFixed(2)}`,
+    `--t:${rise.toFixed(1)}s`,
+    `--w:${(1.6 + random() * 3).toFixed(1)}s`,
+    // Negative delay: every spark starts somewhere along its path, not at the bottom.
+    `--d:-${(random() * rise).toFixed(1)}s`,
+  ].join(';');
+});
 const root = rootPrefix(Astro.url.pathname);
 const pageUrl = absoluteUrl(Astro.url.pathname);
 const imageUrl = absoluteUrl(ogImage);
@@ -86,8 +109,7 @@ const imageUrl = absoluteUrl(ogImage);
           <div class="ambient__glow" />
           <div class="ambient__beam ambient__beam--left" />
           <div class="ambient__beam ambient__beam--right" />
-          <canvas class="ambient__canvas" data-particles />
-          <div class="ambient__grain" />
+          {sparks.map((style) => <i class="ambient__dot" style={style} />)}
         </div>
       )
     }
