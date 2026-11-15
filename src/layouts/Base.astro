@@ -7,7 +7,7 @@ import { absoluteUrl, rootPrefix } from '../lib/site';
 interface Props {
   title: string;
   description: string;
-  /** Site-relative path of the share image, e.g. "og/selami-kacmaz.png" */
+  /** Site-relative path of the share image, e.g. "og/selami-kacmaz.jpg" */
   ogImage?: string;
   /** Plays the logo intro on the first page of a visit. */
   intro?: boolean;
@@ -15,7 +15,7 @@ interface Props {
   ambient?: boolean;
 }
 
-const { title, description, ogImage = 'og/ekip.png', intro = true, ambient = true } = Astro.props;
+const { title, description, ogImage = 'og/ekip.jpg', intro = true, ambient = true } = Astro.props;
 const root = rootPrefix(Astro.url.pathname);
 const pageUrl = absoluteUrl(Astro.url.pathname);
 const imageUrl = absoluteUrl(ogImage);

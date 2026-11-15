@@ -1,6 +1,6 @@
 import type { APIRoute, GetStaticPaths } from 'astro';
 import { people, store } from '../../data/team';
-import { renderOgPng, type OgCard } from '../../lib/og';
+import { renderOgImage, type OgCard } from '../../lib/og';
 
 // Turkish-aware uppercase: plain toUpperCase() would turn "i" into "I" instead of "İ".
 const upper = (text: string): string => text.toLocaleUpperCase('tr-TR');
@@ -34,6 +34,6 @@ export const getStaticPaths = (() => [
 ]) satisfies GetStaticPaths;
 
 export const GET: APIRoute<{ card: OgCard }> = async ({ props }) => {
-  const png = await renderOgPng(props.card);
-  return new Response(png as BodyInit, { headers: { 'Content-Type': 'image/png' } });
+  const image = await renderOgImage(props.card);
+  return new Response(image as BodyInit, { headers: { 'Content-Type': 'image/jpeg' } });
 };

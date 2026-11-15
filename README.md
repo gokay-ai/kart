@@ -45,7 +45,7 @@ bun test         # decodes the generated QR codes with a real decoder
   custom domain with no rebuild.
 - **QR codes are generated in the browser** from the address the page is served
   at (`src/lib/qr.ts`), so they always point at the current domain.
-- vCards (`/vcf/<slug>.vcf`) and share images (`/og/<slug>.png`) are generated at
+- vCards (`/vcf/<slug>.vcf`) and share images (`/og/<slug>.jpg`) are generated at
   build time.
 - Pages are `noindex`: cards are handed out by QR or link and people's contact
   details should not end up in search results.

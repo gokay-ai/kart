@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { Resvg } from '@resvg/resvg-js';
 import satori from 'satori';
+import sharp from 'sharp';
 import { EMBLEM_PATH, EMBLEM_VIEWBOX } from './emblem';
 
 // Build-time only. Paths resolve from the project root because the bundled
@@ -37,7 +38,7 @@ export interface OgCard {
   footer: string;
 }
 
-export async function renderOgPng(card: OgCard): Promise<Uint8Array> {
+export async function renderOgImage(card: OgCard): Promise<Uint8Array> {
   // Two boxes on purpose: satori sizes with content-box, so padding on the
   // 100%-sized root would push the layout past the canvas. The inner box flexes.
   const frame = {
@@ -82,7 +83,10 @@ export async function renderOgPng(card: OgCard): Promise<Uint8Array> {
 
   // satori's public type wants a ReactNode; a plain object tree is what it reads at runtime.
   const svg = await satori(tree as unknown as Parameters<typeof satori>[0], { width: 1200, height: 630, fonts });
-  return new Resvg(svg, { fitTo: { mode: 'width', value: 1200 } }).render().asPng();
+  const png = new Resvg(svg, { fitTo: { mode: 'width', value: 1200 } }).render().asPng();
+  // JPEG keeps the preview small: the gradients make a ~280 KB PNG, and chat
+  // apps drop link previews whose image is too heavy.
+  return sharp(png).jpeg({ quality: 88, mozjpeg: true }).toBuffer();
 }
 
 export function renderEmblemIconPng(size: number): Uint8Array {
