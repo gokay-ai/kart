@@ -39,6 +39,8 @@ export interface Store {
   mobile?: string;
   /** Store landline (E.164) */
   landline?: string;
+  /** Shared mailbox; used for every person without their own `email` */
+  email?: string;
   /** Free text shown next to the clock icon */
   hours?: string;
   /** Search query handed to Google Maps for directions */
@@ -60,11 +62,11 @@ export const store: Store = {
   // The team shares one mobile / WhatsApp number.
   mobile: '+905315972022',
   landline: '+902166631266',
+  email: 'aykailetisim34@gmail.com',
   // TODO(verify): standard mall hours, confirm with the store.
   hours: 'Her gün 10:00 – 22:00',
   mapsQuery: 'Turkcell Palladium AVM Ataşehir İstanbul',
-  // TODO: store Instagram handle (without @).
-  instagram: undefined,
+  instagram: 'turkcell_palladium',
   services: [
     {
       icon: 'repair',
@@ -89,9 +91,9 @@ export const store: Store = {
   ],
 };
 
-// TODO: title and email (and optionally instagram / photo) for each person.
-// "Müşteri Danışmanı" is a placeholder title. Phone and WhatsApp come from
-// `store.mobile` unless a person sets their own.
+// TODO: title (and optionally photo) for each person. "Müşteri Danışmanı" is a
+// placeholder title. Phone, WhatsApp, e-mail and Instagram come from the store
+// unless a person sets their own.
 export const people: Person[] = [
   {
     slug: 'selami-kacmaz',
@@ -126,6 +128,10 @@ export function initials(p: Person): string {
 
 export function phoneOf(p: Person): string | undefined {
   return p.phone ?? store.mobile;
+}
+
+export function emailOf(p: Person): string | undefined {
+  return p.email ?? store.email;
 }
 
 /** "+902166631266" -> "0216 663 12 66" (Turkish national layout; other shapes pass through). */

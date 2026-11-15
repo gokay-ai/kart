@@ -18,7 +18,7 @@ import Emblem from '../../components/Emblem.astro';
 import Monogram from '../../components/Monogram.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import StorePanel from '../../components/StorePanel.astro';
-import { fullName, people, phoneOf, store, type Person, type Service } from '../../data/team';
+import { emailOf, fullName, people, phoneOf, store, type Person, type Service } from '../../data/team';
 import Base from '../../layouts/Base.astro';
 import { rootPrefix } from '../../lib/site';
 
@@ -35,6 +35,7 @@ const name = fullName(person);
 const mates = people.filter((p) => p.slug !== person.slug);
 
 const phone = phoneOf(person);
+const email = emailOf(person);
 const whatsapp = person.whatsapp ?? phone;
 const instagram = person.instagram ?? store.instagram;
 const waText = encodeURIComponent('Merhaba, dijital kartvizitinizden ulaşıyorum.');
@@ -54,7 +55,7 @@ const actions: Action[] = [
     href: whatsapp ? `https://wa.me/${whatsapp.replace(/\D/g, '')}?text=${waText}` : undefined,
     external: true,
   },
-  { key: 'mail', label: 'E-posta', href: person.email ? `mailto:${person.email}` : undefined },
+  { key: 'mail', label: 'E-posta', href: email ? `mailto:${email}` : undefined },
   {
     key: 'instagram',
     label: 'Instagram',

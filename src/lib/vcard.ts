@@ -1,4 +1,4 @@
-import { fullName, phoneOf, store, type Person } from '../data/team';
+import { emailOf, fullName, phoneOf, store, type Person } from '../data/team';
 
 function esc(value: string): string {
   return value.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/([,;])/g, '\\$1');
@@ -17,7 +17,8 @@ export function buildVCard(person: Person, url?: string): string {
   const mobile = phoneOf(person);
   if (mobile) lines.push(`TEL;TYPE=CELL,VOICE:${mobile}`);
   if (store.landline) lines.push(`TEL;TYPE=WORK,VOICE:${store.landline}`);
-  if (person.email) lines.push(`EMAIL;TYPE=INTERNET,WORK:${person.email}`);
+  const email = emailOf(person);
+  if (email) lines.push(`EMAIL;TYPE=INTERNET,WORK:${email}`);
   lines.push(
     `ADR;TYPE=WORK:;;${esc(`${store.mall}, ${store.street}`)};${esc(store.district)};${esc(store.city)};${store.postalCode};Türkiye`,
   );
