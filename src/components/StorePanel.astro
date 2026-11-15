@@ -2,8 +2,9 @@
 import Clock from '@lucide/astro/icons/clock';
 import MapPin from '@lucide/astro/icons/map-pin';
 import Navigation from '@lucide/astro/icons/navigation';
+import Phone from '@lucide/astro/icons/phone';
 import Emblem from './Emblem.astro';
-import { store, storeAddress } from '../data/team';
+import { formatPhone, store, storeAddress } from '../data/team';
 
 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(store.mapsQuery)}`;
 ---
@@ -36,6 +37,22 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComp
           <li>
             <Clock size={18} stroke-width={2} />
             <span>{store.hours}</span>
+          </li>
+        )
+      }
+      {
+        store.landline && (
+          <li>
+            <Phone size={18} stroke-width={2} />
+            <a href={`tel:${store.landline}`}>Sabit hat: {formatPhone(store.landline)}</a>
+          </li>
+        )
+      }
+      {
+        store.mobile && (
+          <li>
+            <Phone size={18} stroke-width={2} />
+            <a href={`tel:${store.mobile}`}>Cep / WhatsApp: {formatPhone(store.mobile)}</a>
           </li>
         )
       }

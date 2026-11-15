@@ -1294,6 +1294,10 @@ svg {
   gap: 10px;
 }
 
+.store__facts a {
+  text-decoration: none;
+}
+
 .store__facts svg {
   margin-top: 1px;
   color: var(--blue-300);

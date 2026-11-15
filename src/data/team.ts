@@ -35,6 +35,10 @@ export interface Store {
   city: string;
   street: string;
   postalCode: string;
+  /** Shared mobile / WhatsApp line (E.164); used for every person without their own `phone` */
+  mobile?: string;
+  /** Store landline (E.164) */
+  landline?: string;
   /** Free text shown next to the clock icon */
   hours?: string;
   /** Search query handed to Google Maps for directions */
@@ -53,6 +57,9 @@ export const store: Store = {
   // TODO(verify): mall address from memory; add the floor / unit number.
   street: 'Barbaros Mah. Halk Cad. No:8/B',
   postalCode: '34746',
+  // The team shares one mobile / WhatsApp number.
+  mobile: '+905315972022',
+  landline: '+902166631266',
   // TODO(verify): standard mall hours, confirm with the store.
   hours: 'Her gün 10:00 – 22:00',
   mapsQuery: 'Turkcell Palladium AVM Ataşehir İstanbul',
@@ -82,8 +89,9 @@ export const store: Store = {
   ],
 };
 
-// TODO: title, phone, email (and optionally whatsapp / instagram / photo) for
-// each person. "Müşteri Danışmanı" is a placeholder title.
+// TODO: title and email (and optionally instagram / photo) for each person.
+// "Müşteri Danışmanı" is a placeholder title. Phone and WhatsApp come from
+// `store.mobile` unless a person sets their own.
 export const people: Person[] = [
   {
     slug: 'selami-kacmaz',
@@ -114,6 +122,16 @@ export function fullName(p: Person): string {
 
 export function initials(p: Person): string {
   return `${p.firstName.charAt(0)}${p.lastName.charAt(0)}`.toLocaleUpperCase('tr-TR');
+}
+
+export function phoneOf(p: Person): string | undefined {
+  return p.phone ?? store.mobile;
+}
+
+/** "+902166631266" -> "0216 663 12 66" (Turkish national layout; other shapes pass through). */
+export function formatPhone(e164: string): string {
+  const m = /^\+90(\d{3})(\d{3})(\d{2})(\d{2})$/.exec(e164);
+  return m ? `0${m[1]} ${m[2]} ${m[3]} ${m[4]}` : e164;
 }
 
 export function storeAddress(): string {
