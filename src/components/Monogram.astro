@@ -1,0 +1,27 @@
+---
+import { fullName, initials, type Person } from '../data/team';
+import { rootPrefix } from '../lib/site';
+
+interface Props {
+  person: Person;
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const { person, size = 'md' } = Astro.props;
+const root = rootPrefix(Astro.url.pathname);
+---
+
+<span class:list={['mono', `mono--${size}`]}>
+  <span class="mono__ring" aria-hidden="true"></span>
+  <span class="mono__disc">
+    {
+      person.photo ? (
+        <img src={`${root}photos/${person.photo}`} alt={fullName(person)} loading="eager" decoding="async" />
+      ) : (
+        <span class="mono__text" aria-hidden="true">
+          {initials(person)}
+        </span>
+      )
+    }
+  </span>
+</span>

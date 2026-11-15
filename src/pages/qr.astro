@@ -1,0 +1,55 @@
+---
+import Download from '@lucide/astro/icons/download';
+import Printer from '@lucide/astro/icons/printer';
+import Emblem from '../components/Emblem.astro';
+import { fullName, people, store } from '../data/team';
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title={`QR Kodlar · ${store.name}`}
+  description="Ekip kartvizitlerinin yazdırılabilir QR kodları."
+  intro={false}
+  ambient={false}
+>
+  <main class="page page--qr">
+    <header class="qr-head">
+      <a class="topbar__brand" href="../" aria-label={`${store.name} ekibi`}>
+        <Emblem />
+        <span>{store.mall}</span>
+      </a>
+      <h1>QR Kodlar</h1>
+      <p>
+        Her kod, bu sayfayı açtığınız adrese göre üretilir. Baskıya göndermeden önce sayfayı kalıcı alan adınız
+        üzerinden açtığınızdan emin olun.
+      </p>
+      <button class="btn btn--ghost" type="button" data-print>
+        <Printer size={18} stroke-width={2.2} />
+        <span>Yazdır</span>
+      </button>
+    </header>
+
+    <ul class="qr-grid">
+      {
+        people.map((person) => (
+          <li class="qr-card">
+            <div class="qr-panel" data-qr={`../${person.slug}/`} data-qr-name={person.slug} />
+            <h2>{fullName(person)}</h2>
+            <p class="qr-card__title">{person.title}</p>
+            <p class="qr-card__url" data-qr-url={`../${person.slug}/`} />
+            <div class="qr-card__actions">
+              <button class="btn btn--ghost btn--sm" type="button" data-qr-download="png">
+                <Download size={16} stroke-width={2.2} />
+                <span>PNG</span>
+              </button>
+              <button class="btn btn--ghost btn--sm" type="button" data-qr-download="svg">
+                <Download size={16} stroke-width={2.2} />
+                <span>SVG</span>
+              </button>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</Base>

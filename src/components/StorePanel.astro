@@ -1,0 +1,48 @@
+---
+import Clock from '@lucide/astro/icons/clock';
+import MapPin from '@lucide/astro/icons/map-pin';
+import Navigation from '@lucide/astro/icons/navigation';
+import Emblem from './Emblem.astro';
+import { store, storeAddress } from '../data/team';
+
+const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(store.mapsQuery)}`;
+---
+
+<div class="store" data-reveal>
+  <div class="store__map" aria-hidden="true">
+    <svg class="store__roads" viewBox="0 0 400 170" preserveAspectRatio="xMidYMid slice">
+      <path d="M-20 128C70 112 120 150 200 118S330 60 430 82" />
+      <path d="M60 -10C82 40 70 96 118 190" />
+      <path d="M270 -10C250 50 300 110 282 190" />
+      <path class="store__road--main" d="M-20 60C80 82 150 40 216 86S340 150 430 132" />
+    </svg>
+    <span class="store__pin">
+      <span class="store__pulse"></span>
+      <span class="store__pulse store__pulse--late"></span>
+      <span class="store__dot"><Emblem /></span>
+    </span>
+  </div>
+
+  <div class="store__body">
+    <p class="store__kind">{store.kind}</p>
+    <h3 class="store__name">{store.name}</h3>
+    <ul class="store__facts">
+      <li>
+        <MapPin size={18} stroke-width={2} />
+        <span>{storeAddress()}</span>
+      </li>
+      {
+        store.hours && (
+          <li>
+            <Clock size={18} stroke-width={2} />
+            <span>{store.hours}</span>
+          </li>
+        )
+      }
+    </ul>
+    <a class="btn btn--ghost" href={mapsUrl} target="_blank" rel="noopener">
+      <Navigation size={18} stroke-width={2.2} />
+      <span>Yol Tarifi Al</span>
+    </a>
+  </div>
+</div>

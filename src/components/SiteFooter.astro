@@ -1,0 +1,11 @@
+---
+import Emblem from './Emblem.astro';
+import { store } from '../data/team';
+---
+
+<footer class="footer" data-reveal>
+  <Emblem class="footer__mark" />
+  <p class="footer__name">{store.name}</p>
+  <p class="footer__place">{store.district}, {store.city}</p>
+  <p class="footer__legal">Turkcell adı ve logosu Turkcell İletişim Hizmetleri A.Ş.’nin tescilli markalarıdır.</p>
+</footer>

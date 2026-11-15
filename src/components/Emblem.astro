@@ -1,0 +1,17 @@
+---
+import { EMBLEM_VIEWBOX } from '../lib/emblem';
+
+interface Props {
+  class?: string;
+  /** Adds a stroke copy of the shape that the intro animates as a line drawing. */
+  draw?: boolean;
+}
+
+const { class: className, draw = false } = Astro.props;
+---
+
+{/* The shape itself lives once per page in Base.astro (#emblem-shape); every use is a reference. */}
+<svg class:list={['emblem', className]} viewBox={EMBLEM_VIEWBOX} aria-hidden="true" focusable="false">
+  <use class="emblem__fill" href="#emblem-shape" fill="currentColor"></use>
+  {draw && <use class="emblem__stroke" href="#emblem-shape" fill="none" />}
+</svg>

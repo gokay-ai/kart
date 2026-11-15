@@ -1,0 +1,111 @@
+---
+import '../styles/global.css';
+import Emblem from '../components/Emblem.astro';
+import { EMBLEM_PATH } from '../lib/emblem';
+import { absoluteUrl, rootPrefix } from '../lib/site';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Site-relative path of the share image, e.g. "og/selami-kacmaz.png" */
+  ogImage?: string;
+  /** Plays the logo intro on the first page of a visit. */
+  intro?: boolean;
+  /** Ambient spotlights + particles. Off for the print-oriented QR sheet. */
+  ambient?: boolean;
+}
+
+const { title, description, ogImage = 'og/ekip.png', intro = true, ambient = true } = Astro.props;
+const root = rootPrefix(Astro.url.pathname);
+const pageUrl = absoluteUrl(Astro.url.pathname);
+const imageUrl = absoluteUrl(ogImage);
+---
+
+<!doctype html>
+<html lang="tr" data-intro={intro ? '' : undefined}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#030a24" />
+    <meta name="color-scheme" content="dark" />
+    <!-- Cards are handed out by QR / link; keep people's contact details out of search results. -->
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="profile" />
+    <meta property="og:locale" content="tr_TR" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {pageUrl && <meta property="og:url" content={pageUrl} />}
+    {
+      imageUrl && (
+        <>
+          <meta property="og:image" content={imageUrl} />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
+          <meta name="twitter:card" content="summary_large_image" />
+        </>
+      )
+    }
+    <link rel="icon" type="image/svg+xml" href={`${root}favicon.svg`} />
+    <link rel="apple-touch-icon" href={`${root}apple-touch-icon.png`} />
+    <link rel="preload" href={`${root}fonts/sora-latin.woff2`} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={`${root}fonts/sora-latin-ext.woff2`} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={`${root}fonts/manrope-latin.woff2`} as="font" type="font/woff2" crossorigin />
+    <script is:inline>
+      // Runs before first paint: decides whether the intro plays and arms a
+      // failsafe so content never stays hidden if the main script fails to load.
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        try {
+          var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (d.hasAttribute('data-intro') && !reduce && !sessionStorage.getItem('intro-seen')) {
+            d.classList.add('intro');
+            sessionStorage.setItem('intro-seen', '1');
+          }
+        } catch (e) {}
+        setTimeout(function () {
+          if (!window.__booted) d.classList.add('failsafe');
+        }, 4000);
+      })();
+    </script>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <defs>
+        {/* pathLength=1 lets the intro animate the outline with a 0..1 dash offset. */}
+        <path id="emblem-shape" d={EMBLEM_PATH} pathLength="1"></path>
+      </defs>
+    </svg>
+
+    {
+      ambient && (
+        <div class="ambient" aria-hidden="true">
+          <div class="ambient__glow" />
+          <div class="ambient__beam ambient__beam--left" />
+          <div class="ambient__beam ambient__beam--right" />
+          <canvas class="ambient__canvas" data-particles />
+          <div class="ambient__grain" />
+        </div>
+      )
+    }
+
+    <div class="intro-screen" id="intro" aria-hidden="true">
+      <div class="intro-screen__mark">
+        <span class="intro-screen__ring" />
+        <span class="intro-screen__ring intro-screen__ring--late" />
+        <Emblem draw />
+      </div>
+    </div>
+
+    <slot />
+
+    <div class="toast" data-toast role="status" aria-live="polite"></div>
+
+    <script>
+      import '../scripts/main';
+    </script>
+  </body>
+</html>

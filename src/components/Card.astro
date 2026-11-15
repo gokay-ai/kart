@@ -1,0 +1,114 @@
+---
+import QrCode from '@lucide/astro/icons/qr-code';
+import Repeat2 from '@lucide/astro/icons/repeat-2';
+import Emblem from './Emblem.astro';
+import Monogram from './Monogram.astro';
+import { fullName, store, type Person } from '../data/team';
+
+interface Props {
+  person: Person;
+}
+
+const { person } = Astro.props;
+
+// One span per letter so the name can rise in letter by letter.
+const letters = (word: string, offset: number) =>
+  Array.from(word).map((ch, i) => ({ ch, i: offset + i }));
+const first = letters(person.firstName, 0);
+const last = letters(person.lastName, first.length);
+---
+
+<div class="card-stage">
+  <div class="card-stage__halo" aria-hidden="true"></div>
+  <div
+    class="card"
+    data-card
+    role="button"
+    tabindex="0"
+    aria-pressed="false"
+    aria-label={`${fullName(person)} kartviziti. QR kodu görmek için kartı çevirin.`}
+  >
+    <div class="card__flip">
+      <div class="card__face card__face--front">
+        <Emblem class="card__watermark" />
+        <div class="card__grid" aria-hidden="true"></div>
+
+        <div class="card__top">
+          <span class="brand">
+            <Emblem class="brand__mark" />
+            <span class="brand__name">{store.brand}</span>
+          </span>
+          <svg class="chip" viewBox="0 0 46 36" aria-hidden="true">
+            <defs>
+              <linearGradient id="chip-gold" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#ffe9a3"></stop>
+                <stop offset="0.45" stop-color="#ffc900"></stop>
+                <stop offset="1" stop-color="#c98f00"></stop>
+              </linearGradient>
+            </defs>
+            <rect x="0.5" y="0.5" width="45" height="35" rx="8" fill="url(#chip-gold)"></rect>
+            <path
+              d="M0.5 12.5h13.5v11H0.5M45.5 12.5H32v11h13.5M14 12.5c0-5 3-7 9-7s9 2 9 7M14 23.5c0 5 3 7 9 7s9-2 9-7M23 5.5v-5M23 35.5v-5"
+              fill="none"
+              stroke="#7a5600"
+              stroke-opacity="0.55"
+              stroke-width="1"></path>
+          </svg>
+        </div>
+
+        <div class="card__id">
+          <Monogram person={person} size="lg" />
+          <h1 class="name" aria-label={fullName(person)}>
+            <span class="name__line name__line--first" aria-hidden="true">
+              {first.map(({ ch, i }) => <span class="name__ch" style={`--i:${i}`}>{ch}</span>)}
+            </span>
+            <span class="name__line name__line--last" aria-hidden="true">
+              {last.map(({ ch, i }) => <span class="name__ch" style={`--i:${i}`}>{ch}</span>)}
+            </span>
+          </h1>
+          <p class="card__title">{person.title}</p>
+        </div>
+
+        <div class="card__bottom">
+          <p class="card__store">
+            <strong>{store.name}</strong>
+            <span>{store.district} · {store.city}</span>
+          </p>
+          <span class="card__flip-hint">
+            <QrCode size={16} stroke-width={2.2} />
+            <span>QR</span>
+          </span>
+        </div>
+
+        <div class="card__sheen" aria-hidden="true"></div>
+      </div>
+
+      <div class="card__face card__face--back" aria-hidden="true">
+        <Emblem class="card__watermark" />
+        <div class="card__grid"></div>
+
+        <div class="card__top">
+          <span class="brand">
+            <Emblem class="brand__mark" />
+            <span class="brand__name">{store.brand}</span>
+          </span>
+          <span class="card__back-name">{fullName(person)}</span>
+        </div>
+
+        <div class="card__qr">
+          <div class="qr-panel" data-qr="./"></div>
+          <p class="card__qr-caption">Kameranızla okutun, kartım telefonunuzda açılsın.</p>
+        </div>
+
+        <div class="card__bottom card__bottom--center">
+          <span class="card__flip-hint">
+            <Repeat2 size={16} stroke-width={2.2} />
+            <span>Kartı çevir</span>
+          </span>
+        </div>
+
+        <div class="card__sheen"></div>
+      </div>
+    </div>
+  </div>
+</div>

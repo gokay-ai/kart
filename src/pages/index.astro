@@ -1,0 +1,64 @@
+---
+import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
+import Emblem from '../components/Emblem.astro';
+import Monogram from '../components/Monogram.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import StorePanel from '../components/StorePanel.astro';
+import { people, store } from '../data/team';
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title={`${store.name} · Dijital Kartvizitler`}
+  description={`${store.name} ekibinin dijital kartvizitleri. Ekibimizle tanışın, tek dokunuşla iletişime geçin.`}
+>
+  <main class="page page--team">
+    <section class="team-hero">
+      <div class="team-hero__mark" data-reveal>
+        <span class="team-hero__ring" aria-hidden="true"></span>
+        <span class="team-hero__ring team-hero__ring--late" aria-hidden="true"></span>
+        <Emblem />
+      </div>
+      <p class="eyebrow eyebrow--center" data-reveal style="--d:1">{store.kind}</p>
+      <h1 class="team-hero__title" data-reveal style="--d:2">
+        <span>{store.mall}</span>
+        <strong>ekibiyle tanışın</strong>
+      </h1>
+      <p class="team-hero__lead" data-reveal style="--d:3">
+        Bir karta dokunun; iletişim bilgileri, mağaza konumu ve QR kod tek sayfada.
+      </p>
+    </section>
+
+    <ul class="deck">
+      {
+        people.map((person, i) => (
+          <li data-reveal style={`--d:${4 + i}`}>
+            <a class="deck__card" href={`./${person.slug}/`}>
+              <Emblem class="deck__watermark" />
+              <Monogram person={person} size="md" />
+              <span class="deck__text">
+                <span class="deck__name">
+                  {person.firstName} <strong>{person.lastName}</strong>
+                </span>
+                <span class="deck__title">{person.title}</span>
+              </span>
+              <span class="deck__go" aria-hidden="true">
+                <ArrowUpRight size={19} stroke-width={2.2} />
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <section class="section" aria-labelledby="magaza">
+      <header class="section__head" data-reveal>
+        <p class="eyebrow">Bizi ziyaret edin</p>
+        <h2 id="magaza">{store.mall}’deyiz</h2>
+      </header>
+      <StorePanel />
+    </section>
+
+    <SiteFooter />
+  </main>
+</Base>

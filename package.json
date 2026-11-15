@@ -1,0 +1,26 @@
+{
+  "name": "turkcell-kart",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && bun scripts/relativize.ts",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@lucide/astro": "^1.73.0",
+    "astro": "^7.4.12",
+    "simple-icons": "^16.38.0",
+    "uqr": "^0.1.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@resvg/resvg-js": "^2.6.2",
+    "@types/bun": "^1.4.4",
+    "jsqr": "^1.4.0",
+    "satori": "^0.63.2",
+    "typescript": "^6"
+  }
+}
